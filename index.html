@@ -113,7 +113,7 @@
     </div>
 
     <div class="download-button-container">
-        <a href="#" id="download-link" class="download-btn" target="_blank">Download Now</a>
+        <a href="#" id="download-link" class="download-btn" download>Download Now</a>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -121,7 +121,7 @@
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyAc78M_nj7kJtnRCTqdEdWsiMQeq4oSuDc",
-            authDomain: "spin-199a_DOMAIN",
+            authDomain: "spin-199a1.firebaseapp.com",
             databaseURL: "https://spin-199a1-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "spin-199a1",
         };
@@ -143,11 +143,16 @@
                         }
                     });
                     downloadLink.href = latestUrl;
+                    downloadLink.onclick = function(e) {
+                        e.preventDefault(); // Prevent default link behavior
+                        window.open(this.href, '_blank'); // Open the URL in a new tab
+                    };
                 } else {
                     downloadLink.href = "#";
                     downloadLink.textContent = "Link Not Available";
                     downloadLink.style.backgroundColor = "#ccc";
                     downloadLink.style.cursor = "not-allowed";
+                    downloadLink.onclick = (e) => e.preventDefault();
                 }
             }, (error) => {
                 console.error("Failed to fetch URL:", error);
