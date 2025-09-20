@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Download Our App</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --button-bg: #ffd700;
+            --button-text: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+        }
+
+        .app-logo {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .download-button-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 350px;
+        }
+
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+            transition: transform 0.2s;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="https://i.ibb.co/vvDL4zY3/1752905038536.png" alt="App Logo" class="app-logo">
+        <h1>Download Our App</h1>
+        <p>Get the best gaming experience by downloading our latest app directly to your device.</p>
+    </div>
+
+    <div class="download-button-container">
+        <a href="#" id="download-link" class="download-btn">Download Now</a>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAc78M_nj7kJtnRCTqdEdWsiMQeq4oSuDc",
+            authDomain: "spin-199a_DOMAIN",
+            databaseURL: "https://spin-199a1-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "spin-199a1",
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        const downloadLink = document.getElementById('download-link');
+
+        function fetchDownloadUrl() {
+            const apksRef = db.ref('Apks');
+            
+            // Fetch the last added URL
+            apksRef.limitToLast(1).on('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    let latestUrl = "#";
+                    snapshot.forEach((childSnapshot) => {
+                        const data = childSnapshot.val();
+                        if (data && data.Url) {
+                            latestUrl = data.Url;
+                        }
+                    });
+                    downloadLink.href = latestUrl;
+                } else {
+                    downloadLink.href = "#";
+                    downloadLink.textContent = "Link Not Available";
+                    downloadLink.style.backgroundColor = "#ccc";
+                    downloadLink.style.cursor = "not-allowed";
+                }
+            }, (error) => {
+                console.error("Failed to fetch URL:", error);
+                downloadLink.textContent = "Error";
+            });
+        }
+
+        window.onload = fetchDownloadUrl;
+    </script>
+
+</body>
+</html>
